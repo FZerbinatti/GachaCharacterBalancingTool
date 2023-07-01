@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "135664245185",
+    "project_id": "gachacharacterbalancingtool",
+    "storage_bucket": "gachacharacterbalancingtool.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135664245185:android:4964fe9a8f11e1cdb6f740",
+        "android_client_info": {
+          "package_name": "com.dreamsphere.gachacharacterbalancingtool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135664245185-t3j5p471m4j3qejavfjq0b69tttiedbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPcf4s3FbG1OH6XfTvkaAwNLxTqQ_TYUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135664245185-t3j5p471m4j3qejavfjq0b69tttiedbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

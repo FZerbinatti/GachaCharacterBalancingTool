@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenCharacterSpecs
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenCharacters
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenLogin
@@ -32,7 +33,7 @@ fun Navigation() {
         }
 
         composable(route = Screen.ScreenNewCharacher.route) {
-            ScreenNewCharacher(navController = navController)
+            ScreenNewCharacher(navController = navController, viewModel = ViewModel())
         }
 
         composable(

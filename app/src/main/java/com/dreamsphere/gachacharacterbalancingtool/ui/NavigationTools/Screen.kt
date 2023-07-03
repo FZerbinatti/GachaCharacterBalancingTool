@@ -6,7 +6,7 @@ sealed class Screen(val route: String){
     object ScreenCharacters: Screen("screen_characters")
     object ScreenNewCharacher: Screen("screen_new_character")
     object ScreenCharacterSpecs: Screen("screen_character_specs")
-    object ScreenCharacterAbilities: Screen("screen_character_abilities")
+    object ScreenCharacterAbility: Screen("screen_character_ability")
 
     fun withArgs(vararg args: String): String{
         return buildString {

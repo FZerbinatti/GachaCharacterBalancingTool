@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -91,6 +92,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                 OutlinedTextField(
                     value = ability_name,
                     label = { Text(text = "ability_name") },
+                    keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next),
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -98,19 +100,11 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                     onValueChange = { ability_name = it })
                 Spacer(modifier = Modifier.padding(10.dp))
 
-                OutlinedTextField(
-                    value = ability_effects,
-                    label = { Text(text = "ability_effects") },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = Color.White),
-                    onValueChange = { ability_effects = it })
-                Spacer(modifier = Modifier.padding(10.dp))
+
 
                 OutlinedTextField(
                     value = ability_cooldown,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_cooldown") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -121,7 +115,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
 
                 OutlinedTextField(
                     value = ability_cost,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_cost") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -132,7 +126,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
 
                 OutlinedTextField(
                     value = ability_unlock,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_unlock") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -143,7 +137,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
 
                 OutlinedTextField(
                     value = ability_change_aoe,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_change_aoe") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -174,8 +168,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                                 .height(50.dp)
                                 .fillMaxWidth(),
                             onClick = {
-                                closeRecord.invoke()
-                                viewModel.faction.value= abilityEffectsListState.value.get(i).ability_effect_name
+
                             },
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)
@@ -214,8 +207,8 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                                 .height(50.dp),
 
                             onClick = {
-                                val index = viewModel.ability.size
-                                viewModel.ability[index] = Ability(
+                                //val index = viewModel.ability.size
+                                viewModel.ability.add(Ability(
                                     ability_name.text,
                                     viewModel.abilityEffectsListFlow.value,
                                     ability_cooldown.text.toInt(),
@@ -226,7 +219,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
 
 
 
-                                )
+                                ))
                                 closeRecord.invoke()
                                 //add to list
                             },

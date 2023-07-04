@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
                 OutlinedTextField(
                     value = ability_effect_name,
                     label = { Text(text = "ability_effect_name") },
+                    keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next),
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -67,6 +69,7 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
                 OutlinedTextField(
                     value = ability_effect_type,
                     label = { Text(text = "ability_effect_type") },
+                    keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next),
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -76,7 +79,7 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
 
                 OutlinedTextField(
                     value = ability_effect_value,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_effect_value") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -89,6 +92,7 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
                     value = ability_effect_description,
 
                     label = { Text(text = "ability_effect_description") },
+                    keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next),
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -98,7 +102,7 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
 
                 OutlinedTextField(
                     value = ability_effect_unolock,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     label = { Text(text = "ability_effect_unolock") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -117,13 +121,13 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
                         .height(50.dp)
                         .fillMaxWidth(),
                     onClick = {
-                        val index = viewModel.ability_effects.size
-                        viewModel.ability_effects[index] = AbilityEffect(
+                        //val index = viewModel.ability_effects.size
+                        viewModel.ability_effects.add(AbilityEffect(
                             ability_effect_name.text,
                             ability_effect_type.text,
                             ability_effect_value.text.toInt(),
                             ability_effect_description.text,
-                            ability_effect_unolock.text.toInt()  )
+                            ability_effect_unolock.text.toInt()  ))
                         closeRecord.invoke()
                         //add to list
                     },

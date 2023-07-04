@@ -18,12 +18,16 @@ import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 
 @Composable
-fun PersonalizedAlertDialogGenerals(closeRecord: () -> Unit, viewModel: ViewModel) {
+fun PersonalizedAlertDialogGenerals(closeRecord: () -> Unit, viewModel: ViewModel, type:String) {
 
 
     val generalsListState = viewModel.generalListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+
+    val FACTIONS = "factions"
+    val CLASSES = "classes"
+    val TIERS = "tiers"
     /*val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(focusRequester) {
@@ -59,7 +63,10 @@ fun PersonalizedAlertDialogGenerals(closeRecord: () -> Unit, viewModel: ViewMode
                                 .height(50.dp)
                                 .fillMaxWidth(),
                             onClick = {
-                                viewModel.faction.value= generalsListState.value.get(i)
+                                if (type.equals(FACTIONS)){viewModel.faction.value= generalsListState.value.get(i)}else
+                                if (type.equals(CLASSES)){viewModel.classs.value= generalsListState.value.get(i)}else
+                                if (type.equals(TIERS)){viewModel.tier.value= generalsListState.value.get(i)}
+
 
                                 closeRecord.invoke()
 

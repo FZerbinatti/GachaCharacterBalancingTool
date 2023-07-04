@@ -35,12 +35,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -57,8 +65,10 @@ import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDia
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogNewAbility
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.WindowCenterOffsetPositionProvider
 import com.dreamsphere.gachacharacterbalancingtool.ui.theme.GachaCharacterBalancingToolTheme
+import com.dreamsphere.sharedshoplistk.repository.Firebase.Firebase
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
@@ -76,13 +86,13 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
     val scope = rememberCoroutineScope()
 
     val abilityListState = viewModel.abilityListFlow.collectAsState()
-
-
+    val focusManager = LocalFocusManager.current
 
     //firebase
     val FACTIONS = "factions"
     val CLASSES = "classes"
     val TIERS = "tiers"
+
 
     var ability_name = "New Ability"
     var character_name by remember { mutableStateOf(TextFieldValue("")) }
@@ -133,7 +143,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         Text(text = "Creazione nuovo personaggio")
 
                         //ScrollView
-                        if (showDialogGenerals.value){
+                        if (showDialogGenerals.value) {
 
 
                             Popup(
@@ -146,10 +156,10 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                     scope.launch {
                                         lazyListState.scrollToItem(generalsListState.value.size)
                                     }
-                                }, viewModel)
+                                }, viewModel, type)
                             }
                         }
-                        if (showDialogNewAbility.value){
+                        if (showDialogNewAbility.value) {
                             Popup(
                                 popupPositionProvider = WindowCenterOffsetPositionProvider(),
                                 onDismissRequest = { showDialogNewAbility.value = false },
@@ -165,16 +175,26 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         }
 
 
-
-
                         // ------------------------------------- boxes --------------------------------------------------
                         OutlinedTextField(
                             value = character_name,
                             label = { Text(text = "character_name") },
+                            onValueChange = { character_name = it },
+
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_name = it })
+                                /*.onKeyEvent {
+                                    if (it.key == Key.Enter) {
+                                        focusManager.moveFocus(FocusDirection.Next)
+                                        true
+                                    }else{false}
+                                },*/
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            maxLines = 1
+
+
+                        )
 
                         Spacer(modifier = Modifier.padding(int_spacer))
                         Row(
@@ -190,17 +210,19 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                 )
                                 .clip(RoundedCornerShape(5.dp))
                                 .background(Color.White),
-                        ){
+                        ) {
                             ClickableText(
                                 AnnotatedString(viewModel.faction.value),
                                 onClick = {
                                     type = FACTIONS
                                     Log.d("Main", "ScreenNewCharacher 1: " + type)
                                     viewModel.getHardCodedDataFromFirebase(type)
-                                    showDialogGenerals.value = true },
+                                    showDialogGenerals.value = true
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(10.dp))
+                                    .padding(10.dp)
+                            )
                         }
                         Spacer(modifier = Modifier.padding(int_spacer))
 
@@ -210,6 +232,8 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+
                             onValueChange = { character_description = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
@@ -226,16 +250,18 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                 )
                                 .clip(RoundedCornerShape(5.dp))
                                 .background(Color.White),
-                        ){
+                        ) {
                             ClickableText(
                                 AnnotatedString(viewModel.classs.value),
                                 onClick = {
                                     type = CLASSES
                                     viewModel.getHardCodedDataFromFirebase(type)
-                                    showDialogGenerals.value = true },
+                                    showDialogGenerals.value = true
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(10.dp))
+                                    .padding(10.dp)
+                            )
                         }
                         Spacer(modifier = Modifier.padding(int_spacer))
 
@@ -252,24 +278,26 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                 )
                                 .clip(RoundedCornerShape(5.dp))
                                 .background(Color.White),
-                        ){
+                        ) {
                             ClickableText(
                                 AnnotatedString(viewModel.tier.value),
                                 onClick = {
                                     type = TIERS
                                     Log.d("Main", "ScreenNewCharacher 1: " + type)
                                     viewModel.getHardCodedDataFromFirebase(type)
-                                    showDialogGenerals.value = true },
+                                    showDialogGenerals.value = true
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(10.dp))
+                                    .padding(10.dp)
+                            )
                         }
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
                             value = character_hp,
                             label = { Text(text = "character_hp") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
@@ -280,17 +308,19 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         OutlinedTextField(
                             value = character_atk,
                             label = { Text(text = "character_atk") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
+
                             onValueChange = { character_atk = it })
+
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
                             value = character_def,
                             label = { Text(text = "character_def") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
@@ -308,19 +338,24 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
 
                         //listview con i nomi delle abilità
 
-                        if (abilityListState.value.size>0){
-                            for (i in 0..abilityListState.value.size-1){
-                                Log.d("Main Alert", "PersonalizedAlertDialog: "+abilityListState.value.get(i).toString())
+                        if (abilityListState.value.size > 0) {
+                            for (i in 0..abilityListState.value.size - 1) {
+                                Log.d("Main Alert", "PersonalizedAlertDialog: " + abilityListState.value.get(i).toString())
 
-                                Text(
-                                    text = abilityListState.value.get(i).ability_name, color = colorResource(id = R.color.black),
+
+
+                                TextButton(
                                     modifier = Modifier
                                         .height(50.dp)
                                         .fillMaxWidth(),
+                                    onClick = {
 
-                                    /*border = BorderStroke(2.dp, Color.Gray),
-                                    shape = RoundedCornerShape(15.dp)*/
-                                )
+                                    },
+                                    border = BorderStroke(2.dp, Color.Gray),
+                                    shape = RoundedCornerShape(15.dp)
+                                ) {
+                                    Text(text = abilityListState.value.get(i).ability_name,)
+                                }
 
                                 Spacer(modifier = Modifier.padding(10.dp))
                             }
@@ -346,7 +381,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                     character_avatar.text
                                 )
 
-                                Log.d(TAG, "ScreenNewCharacher: Added Character: "+character)
+                                Log.d(TAG, "Main ScreenNewCharacher: Added Character: " + character)
+                                val firebase= Firebase()
+                                firebase.addCharacterFirebase(character)
                             },
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)

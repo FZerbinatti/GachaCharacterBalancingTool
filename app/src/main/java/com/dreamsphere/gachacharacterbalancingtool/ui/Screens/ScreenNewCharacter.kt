@@ -1,7 +1,9 @@
 package com.dreamsphere.gachacharacterbalancingtool.ui.Screens
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
@@ -23,6 +26,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -37,11 +41,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools.Screen
@@ -66,6 +74,8 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
     val generalsListState = viewModel.generalListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+
+    val abilityListState = viewModel.abilityListFlow.collectAsState()
 
 
 
@@ -93,8 +103,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
 
                     backgroundColor = colorResource(id = R.color.white),
                     onClick = {
-                        //vai alla pagina di abilità pg
-                        navController.navigate(Screen.ScreenCharacterAbility.withArgs(ability_name))
+                        //open alert dialog ability
+                        //navController.navigate(Screen.ScreenCharacterAbility.withArgs(ability_name))
+                        showDialogNewAbility.value = true
 
                     }) {
                     //Icon(Icons.Default.Add, contentDescription = null)
@@ -258,6 +269,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         OutlinedTextField(
                             value = character_hp,
                             label = { Text(text = "character_hp") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
@@ -268,6 +280,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         OutlinedTextField(
                             value = character_atk,
                             label = { Text(text = "character_atk") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
@@ -277,6 +290,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         OutlinedTextField(
                             value = character_def,
                             label = { Text(text = "character_def") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
@@ -293,6 +307,52 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         //listview con i nomi delle abilità
+
+                        if (abilityListState.value.size>0){
+                            for (i in 0..abilityListState.value.size-1){
+                                Log.d("Main Alert", "PersonalizedAlertDialog: "+abilityListState.value.get(i).toString())
+
+                                Text(
+                                    text = abilityListState.value.get(i).ability_name, color = colorResource(id = R.color.black),
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .fillMaxWidth(),
+
+                                    /*border = BorderStroke(2.dp, Color.Gray),
+                                    shape = RoundedCornerShape(15.dp)*/
+                                )
+
+                                Spacer(modifier = Modifier.padding(10.dp))
+                            }
+                        }
+
+                        //----------------------------------------------- OK BUTTON ----------------------------------------------------------
+                        TextButton(
+                            modifier = Modifier
+                                .height(50.dp)
+                                .fillMaxWidth(),
+                            onClick = {
+                                //add firebase
+                                val character = Character(
+                                    character_name.text,
+                                    viewModel.ability,
+                                    viewModel.faction.value,
+                                    character_description.text,
+                                    viewModel.classs.value,
+                                    viewModel.tier.value,
+                                    character_atk.text,
+                                    character_def.text,
+                                    character_hp.text,
+                                    character_avatar.text
+                                )
+
+                                Log.d(TAG, "ScreenNewCharacher: Added Character: "+character)
+                            },
+                            border = BorderStroke(2.dp, Color.Gray),
+                            shape = RoundedCornerShape(15.dp)
+                        ) {
+                            Text(text = "OK", color = colorResource(id = R.color.black))
+                        }
 
                     }
                 }

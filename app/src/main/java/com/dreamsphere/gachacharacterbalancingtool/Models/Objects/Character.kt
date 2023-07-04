@@ -2,7 +2,7 @@ package com.dreamsphere.gachacharacterbalancingtool.Models.Objects
 
 data class Character(
 
-    val character_name: String,
+    var character_name: String,
     val character_abilities_list: List<Ability>,
     val character_faction: String,
     val character_description:String,
@@ -14,4 +14,5 @@ data class Character(
     val character_avatar:String,
 
 
-)
+
+    )

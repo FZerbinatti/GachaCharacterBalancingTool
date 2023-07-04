@@ -3,7 +3,10 @@ package com.dreamsphere.gachacharacterbalancingtool.ViewModels
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -15,14 +18,30 @@ class ViewModel()  : ViewModel(){
     private val TAG = "Main ViewModel"
     private var generalList = mutableStateListOf<String>()
     private val _generalListFlow = MutableStateFlow(generalList)
+    //Generals
     val generalListFlow: StateFlow<List<String>> get() = _generalListFlow
 
     val faction = mutableStateOf("select faction")
     val classs = mutableStateOf("select class")
     val tier = mutableStateOf("select tier")
 
+    //abilitiers specs
+    val ability_effects = mutableStateListOf<AbilityEffect>()
+    val ability= mutableStateListOf<Ability>()
+
+    private val _abilityEffectsListFlow = MutableStateFlow(ability_effects)
+    private val _abilityListFlow = MutableStateFlow(ability)
+
+    val abilityEffectsListFlow: StateFlow<List<AbilityEffect>> get() = _abilityEffectsListFlow
+    val abilityListFlow: StateFlow<List<Ability>> get() = _abilityListFlow
+
+
+
+
+
     init {
         //getHardCodedDataFromFirebase(type)
+
     }
 
     fun getHardCodedDataFromFirebase(type: String) {

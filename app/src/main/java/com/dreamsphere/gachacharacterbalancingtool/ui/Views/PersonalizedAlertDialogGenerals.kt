@@ -59,14 +59,18 @@ fun PersonalizedAlertDialogGenerals(closeRecord: () -> Unit, viewModel: ViewMode
                                 .height(50.dp)
                                 .fillMaxWidth(),
                             onClick = {
-                                closeRecord.invoke()
                                 viewModel.faction.value= generalsListState.value.get(i)
+
+                                closeRecord.invoke()
+
                             },
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)
                         ) {
                             Text(text = generalsListState.value.get(i), color = colorResource(id = R.color.black))
                         }
+
+
                         
                         Spacer(modifier = Modifier.padding(10.dp))
                     }

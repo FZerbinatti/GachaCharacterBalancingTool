@@ -8,5 +8,4 @@ data class AbilityEffect(
     val ability_effect_description: String,
     val ability_effect_unlock: Int,
 
-
     )

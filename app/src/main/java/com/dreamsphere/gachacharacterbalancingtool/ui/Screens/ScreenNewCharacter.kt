@@ -93,6 +93,8 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
     val CLASSES = "classes"
     val TIERS = "tiers"
 
+    //var current_character = viewModel.characterViewState.value
+
 
     var ability_name = "New Ability"
     var character_name by remember { mutableStateOf(TextFieldValue("")) }
@@ -104,6 +106,13 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
     var character_atk by remember { mutableStateOf(TextFieldValue("")) }
     var character_def by remember { mutableStateOf(TextFieldValue("")) }
     var character_avatar by remember { mutableStateOf(TextFieldValue("")) }
+    /*Log.d(TAG, "ScreenNewCharacher !!!!!!!!!!!!!!!!!!!!!!!: "+current_character.character_name)
+    if (!current_character.character_name?.isEmpty()!!){
+        Log.d(TAG, "ScreenNewCharacher: ????????????????????????????????????????????")
+        character_name= TextFieldValue(current_character.character_name.toString())
+    }*/
+
+
 
     GachaCharacterBalancingToolTheme() {
         Scaffold(
@@ -354,7 +363,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                                     border = BorderStroke(2.dp, Color.Gray),
                                     shape = RoundedCornerShape(15.dp)
                                 ) {
-                                    Text(text = abilityListState.value.get(i).ability_name,)
+                                    Text(text = abilityListState.value.get(i).ability_name.toString(),)
                                 }
 
                                 Spacer(modifier = Modifier.padding(10.dp))

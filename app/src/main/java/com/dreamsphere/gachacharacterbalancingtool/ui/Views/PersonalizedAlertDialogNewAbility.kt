@@ -173,7 +173,7 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)
                         ) {
-                            Text(text = abilityEffectsListState.value.get(i).ability_effect_name, color = colorResource(id = R.color.black))
+                            Text(text = abilityEffectsListState.value.get(i).ability_effect_name.toString(), color = colorResource(id = R.color.black))
                         }
 
 

@@ -28,7 +28,7 @@ class Firebase() {
 
 
     fun addCharacterFirebase(character: Character) {
-        firebase_shoplists_ids.child(character.character_name).setValue(character)
+        firebase_shoplists_ids.child(character.character_name.toString()).setValue(character)
     }
 
     fun deleteFromFirebase(item_name: String) {

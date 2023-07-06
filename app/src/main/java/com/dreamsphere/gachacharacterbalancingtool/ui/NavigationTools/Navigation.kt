@@ -30,7 +30,7 @@ fun Navigation() {
         }
 
         composable(route = Screen.ScreenCharacters.route) {
-            ScreenCharacters(navController = navController)
+            ScreenCharacters(navController = navController,viewModel = ViewModel())
         }
 
         composable(route = Screen.ScreenNewCharacher.route) {

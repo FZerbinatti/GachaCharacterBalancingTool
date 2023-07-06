@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -16,10 +17,19 @@ import kotlinx.coroutines.flow.StateFlow
 
 class ViewModel()  : ViewModel(){
     private val TAG = "Main ViewModel"
+
+    //Generals
     private var generalList = mutableStateListOf<String>()
     private val _generalListFlow = MutableStateFlow(generalList)
-    //Generals
     val generalListFlow: StateFlow<List<String>> get() = _generalListFlow
+    //Characters
+    var charactersList = mutableStateListOf<Character>()
+    val _charactersListFlow = MutableStateFlow(generalList)
+    val charactersListFlow: StateFlow<List<String>> get() = _charactersListFlow
+
+    var character= Character()
+    private val _characterViewState = MutableStateFlow<Character>(character)
+    var characterViewState: StateFlow<Character> = _characterViewState
 
     val faction = mutableStateOf("select faction")
     val classs = mutableStateOf("select class")
@@ -41,6 +51,7 @@ class ViewModel()  : ViewModel(){
 
     init {
         //getHardCodedDataFromFirebase(type)
+        getCharactersFromFirebase()
 
     }
 
@@ -67,5 +78,53 @@ class ViewModel()  : ViewModel(){
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    fun getCharactersFromFirebase() {
+        Log.d(TAG, "getCharactersFromFirebase: ")
+
+        val database = com.google.firebase.ktx.Firebase.database("https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/")
+        //var index=0
+        val firebase_shoplists_ids = database.getReference("characters")
+
+        firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                generalList.clear()
+                for (DataSnap in snapshot.children) {
+                    val item = DataSnap.getValue(Character::class.java)
+
+                    if (item != null) {
+                        charactersList.add(item)
+                        Log.d(TAG, "onDataChange: "+item)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    fun getCharecterData(characterName: String) {
+
+        Log.d(TAG, "getCharactersFromFirebase: ")
+
+        val database = com.google.firebase.ktx.Firebase.database("https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/")
+        //var index=0
+        val firebase_shoplists_ids = database.getReference("characters").child(characterName)
+
+        firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                generalList.clear()
+                    val item = snapshot.getValue(Character::class.java)
+                _characterViewState.value= item!!
+                Log.d(TAG, "onDataChange ================== : "+item.character_name)
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
 }

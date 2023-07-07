@@ -1,5 +1,7 @@
 package com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools
 
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
+
 sealed class Screen(val route: String){
     object ScreenLogin: Screen("screen_login")
     object ScreenMainMenu: Screen("screen_main_menu")
@@ -9,6 +11,24 @@ sealed class Screen(val route: String){
     object ScreenCharacterAbility: Screen("screen_character_ability")
 
     fun withArgs(vararg args: String): String{
+        return buildString {
+            append(route)
+            args.forEach{ arg ->
+                append("/$arg")
+            }
+        }
+    }
+
+    fun withArgs(vararg args: Int): String{
+        return buildString {
+            append(route)
+            args.forEach{ arg ->
+                append("/$arg")
+            }
+        }
+    }
+
+    fun withArgs(vararg args: Character): String{
         return buildString {
             append(route)
             args.forEach{ arg ->

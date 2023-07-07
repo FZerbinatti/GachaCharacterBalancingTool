@@ -33,13 +33,23 @@ fun Navigation() {
             ScreenCharacters(navController = navController,viewModel = ViewModel())
         }
 
-        composable(route = Screen.ScreenNewCharacher.route) {
-            ScreenNewCharacher(navController = navController, viewModel = ViewModel())
-        }
-
-/*        composable(route = Screen.ScreenCharacterAbility.route) {
-            ScreenCharacterAbility("AAA",navController = navController, viewModel = ViewModel())
+        /*composable(route = Screen.ScreenNewCharacher.route) {
+            ScreenNewCharacher(navController = navController,viewModel = ViewModel())
         }*/
+
+        composable(
+            route = Screen.ScreenNewCharacher.route +"/{index}",
+            arguments = listOf(
+                navArgument("characther_name") {
+                    type = NavType.StringType
+                    defaultValue = "-1"
+                    nullable = true
+                }
+            )
+        ){entry->
+            Log.d(TAG, "Navigation: "+entry)
+            ScreenNewCharacher(navController, viewModel = ViewModel(), index = entry.arguments?.getString("index"))
+        }
 
 
         composable(

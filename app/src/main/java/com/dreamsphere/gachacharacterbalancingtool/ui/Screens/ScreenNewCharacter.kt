@@ -38,12 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
@@ -55,12 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
-import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
-import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
-import com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools.Screen
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogGenerals
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogNewAbility
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.WindowCenterOffsetPositionProvider
@@ -69,9 +61,9 @@ import com.dreamsphere.sharedshoplistk.repository.Firebase.Firebase
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
-fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
+fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index: String?) {
 
 
     val int_spacer = 10.dp
@@ -95,22 +87,39 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
 
     //var current_character = viewModel.characterViewState.value
 
+    var character_name_string = mutableStateOf<String>("String")
+    var character_name by remember { mutableStateOf(TextFieldValue(character_name_string.toString())) }
 
-    var ability_name = "New Ability"
-    var character_name by remember { mutableStateOf(TextFieldValue("")) }
-    var character_faction by remember { mutableStateOf(TextFieldValue("")) }
-    var character_description by remember { mutableStateOf(TextFieldValue("")) }
-    var character_class by remember { mutableStateOf(TextFieldValue("")) }
-    var character_tier by remember { mutableStateOf(TextFieldValue("")) }
-    var character_hp by remember { mutableStateOf(TextFieldValue("")) }
-    var character_atk by remember { mutableStateOf(TextFieldValue("")) }
-    var character_def by remember { mutableStateOf(TextFieldValue("")) }
-    var character_avatar by remember { mutableStateOf(TextFieldValue("")) }
-    /*Log.d(TAG, "ScreenNewCharacher !!!!!!!!!!!!!!!!!!!!!!!: "+current_character.character_name)
-    if (!current_character.character_name?.isEmpty()!!){
-        Log.d(TAG, "ScreenNewCharacher: ????????????????????????????????????????????")
-        character_name= TextFieldValue(current_character.character_name.toString())
-    }*/
+    var character_faction_string = mutableStateOf<String>("")
+
+    var character_description_string = mutableStateOf<String>("String")
+    var character_description by remember { mutableStateOf(TextFieldValue(character_description_string.toString())) }
+
+    var character_hp_string = mutableStateOf<String>("String")
+    var character_hp by remember { mutableStateOf(TextFieldValue(character_hp_string.toString())) }
+
+    var character_atk_string = mutableStateOf<String>("String")
+    var character_atk by remember { mutableStateOf(TextFieldValue(character_atk_string.toString())) }
+
+    var character_def_string = mutableStateOf<String>("String")
+    var character_def by remember { mutableStateOf(TextFieldValue(character_def_string.toString())) }
+
+    var character_avatar_string = mutableStateOf<String>("String")
+    var character_avatar by remember { mutableStateOf(TextFieldValue(character_avatar_string.toString())) }
+
+    val characterListState = viewModel.charactersListFlow.collectAsState()
+    if (characterListState.value.size>0){
+        val char = characterListState.value[index?.toInt()!!]
+        character_name_string.value = char.character_name.toString()
+        character_description_string.value = char.character_description.toString()
+        character_hp_string.value = char.character_hp.toString()
+        character_atk_string.value = char.character_atk.toString()
+        character_def_string.value = char.character_def.toString()
+        character_avatar_string.value = char.character_avatar.toString()
+        character_faction_string.value = char.character_faction.toString()
+
+
+    }
 
 
 
@@ -186,9 +195,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
 
                         // ------------------------------------- boxes --------------------------------------------------
                         OutlinedTextField(
-                            value = character_name,
+                            value = viewModel.character_name.value,
                             label = { Text(text = "character_name") },
-                            onValueChange = { character_name = it },
+                            onValueChange = { viewModel.character_name.value =it },
 
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -236,14 +245,14 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_description,
+                            value = character_description_string.value,
                             label = { Text(text = "character_description") },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
 
-                            onValueChange = { character_description = it })
+                            onValueChange = { character_description_string.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         Row(
@@ -304,45 +313,45 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel) {
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_hp,
+                            value = character_hp_string.value,
                             label = { Text(text = "character_hp") },
                             keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_hp = it })
+                            onValueChange = { character_hp_string.value = it })
 
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_atk,
+                            value = character_atk_string.value,
                             label = { Text(text = "character_atk") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
 
-                            onValueChange = { character_atk = it })
+                            onValueChange = { character_atk_string.value = it })
 
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_def,
+                            value = character_def_string.value,
                             label = { Text(text = "character_def") },
                             keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_def = it })
+                            onValueChange = { character_def_string.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_avatar,
+                            value = character_avatar_string.value,
                             label = { Text(text = "character_avatar") },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_avatar = it })
+                            onValueChange = { character_avatar_string.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         //listview con i nomi delle abilità

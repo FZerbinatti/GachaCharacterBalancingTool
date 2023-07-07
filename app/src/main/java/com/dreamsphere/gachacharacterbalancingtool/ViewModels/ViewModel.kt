@@ -1,8 +1,11 @@
 package com.dreamsphere.gachacharacterbalancingtool.ViewModels
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
@@ -24,16 +27,26 @@ class ViewModel()  : ViewModel(){
     val generalListFlow: StateFlow<List<String>> get() = _generalListFlow
     //Characters
     var charactersList = mutableStateListOf<Character>()
-    val _charactersListFlow = MutableStateFlow(generalList)
-    val charactersListFlow: StateFlow<List<String>> get() = _charactersListFlow
+    val _charactersListFlow = MutableStateFlow(charactersList)
+    val charactersListFlow: StateFlow<List<Character>> get() = _charactersListFlow
+
+    //index to point list
+    var index = -1
+    private val _indexviewState = MutableStateFlow<Int>(index)
+    val indexviewState: StateFlow<Int> = _indexviewState
+
+
+
 
     var character= Character()
-    private val _characterViewState = MutableStateFlow<Character>(character)
+    var _characterViewState = MutableStateFlow<Character>(character)
     var characterViewState: StateFlow<Character> = _characterViewState
 
+    // state of selected character data for other screeen
     val faction = mutableStateOf("select faction")
     val classs = mutableStateOf("select class")
     val tier = mutableStateOf("select tier")
+    var character_name = mutableStateOf<String>("Character Name")
 
     //abilitiers specs
     val ability_effects = mutableStateListOf<AbilityEffect>()
@@ -49,9 +62,17 @@ class ViewModel()  : ViewModel(){
 
 
 
+    fun selectCharacter(index: Int){
+        if(!charactersList.isEmpty()){
+            _characterViewState.value = charactersList[index]
+        }
+    }
+
+
     init {
         //getHardCodedDataFromFirebase(type)
         getCharactersFromFirebase()
+        Log.d(TAG, "char? : "+characterViewState.value)
 
     }
 
@@ -81,7 +102,6 @@ class ViewModel()  : ViewModel(){
     }
 
     fun getCharactersFromFirebase() {
-        Log.d(TAG, "getCharactersFromFirebase: ")
 
         val database = com.google.firebase.ktx.Firebase.database("https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/")
         //var index=0
@@ -89,15 +109,18 @@ class ViewModel()  : ViewModel(){
 
         firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                generalList.clear()
+                charactersList.clear()
                 for (DataSnap in snapshot.children) {
                     val item = DataSnap.getValue(Character::class.java)
 
                     if (item != null) {
                         charactersList.add(item)
+
                         Log.d(TAG, "onDataChange: "+item)
                     }
                 }
+                Log.d(TAG, "getCharactersFromFirebase: "+charactersList.size)
+
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -105,7 +128,7 @@ class ViewModel()  : ViewModel(){
         })
     }
 
-    fun getCharecterData(characterName: String) {
+/*    fun getCharecterData(characterName: String) {
 
         Log.d(TAG, "getCharactersFromFirebase: ")
 
@@ -126,5 +149,5 @@ class ViewModel()  : ViewModel(){
             }
         })
 
-    }
+    }*/
 }

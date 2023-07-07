@@ -1,6 +1,6 @@
 package com.dreamsphere.gachacharacterbalancingtool.ui.Views
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -19,17 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools.Screen
 
 @Composable
-fun CardCharacter(navController: NavController, viewModel: ViewModel, character_name: String, character_image: String, index:Int) {
+fun CardCharacter(
+    navController: NavController,
+    viewModel: ViewModel,
+    character: Character,
+    index: Int
+) {
     Card(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable {
-                    navController.navigate(Screen.ScreenNewCharacher.route) },
+                viewModel.selectCharacter(index)
+                //viewModel.character = character
+                Log.d("Main Card", "CardCharacter: recieved char: "+character)
+                Log.d("Main Card", "CardCharacter: viewmodel char before: "+viewModel._characterViewState.value)
+                //viewModel._characterViewState.value = character
+                Log.d("Main Card", "CardCharacter: viewmodel char after: "+viewModel._characterViewState.value)
+
+
+                //navController.navigate(Screen.ScreenNewCharacher.route)
+                navController.navigate(Screen.ScreenNewCharacher.withArgs(index.toString()))
+            },
+
         shape = MaterialTheme.shapes.medium,
         elevation = 5.dp,
         backgroundColor = MaterialTheme.colors.surface
@@ -44,9 +61,12 @@ fun CardCharacter(navController: NavController, viewModel: ViewModel, character_
                     .padding(8.dp),
                 contentScale = ContentScale.Fit,
             )*/
-            Column(Modifier.padding(8.dp).height(50.dp), verticalArrangement = Arrangement.Center) {
+            Column(
+                Modifier
+                    .padding(8.dp)
+                    .height(50.dp), verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = character_name,
+                    text = character.character_name.toString(),
                     style = MaterialTheme.typography.h6,
 
                     color = MaterialTheme.colors.onSurface,

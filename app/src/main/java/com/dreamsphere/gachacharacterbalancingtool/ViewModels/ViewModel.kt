@@ -30,6 +30,8 @@ class ViewModel()  : ViewModel(){
     val _charactersListFlow = MutableStateFlow(charactersList)
     val charactersListFlow: StateFlow<List<Character>> get() = _charactersListFlow
 
+
+
     //index to point list
     var index = -1
     private val _indexviewState = MutableStateFlow<Int>(index)
@@ -43,9 +45,24 @@ class ViewModel()  : ViewModel(){
     var characterViewState: StateFlow<Character> = _characterViewState
 
     // state of selected character data for other screeen
-    val faction = mutableStateOf("select faction")
-    val classs = mutableStateOf("select class")
-    val tier = mutableStateOf("select tier")
+
+    val faction_string = "select faction"
+    val classs_string = "select class"
+    val tier_string = "select tier"
+
+    val faction = mutableStateOf(faction_string)
+    val classs = mutableStateOf(classs_string)
+    val tier = mutableStateOf(tier_string)
+
+    var faction_flow = MutableStateFlow<String>(faction_string)
+    var classs_flow = MutableStateFlow(classs_string)
+    var tier_flow = MutableStateFlow(tier_string)
+
+    var faction_state: StateFlow<String> = faction_flow
+    var classs_state: StateFlow<String> = classs_flow
+    var tier_state: StateFlow<String> = tier_flow
+
+
     var character_name = mutableStateOf<String>("Character Name")
 
     //abilitiers specs
@@ -63,9 +80,10 @@ class ViewModel()  : ViewModel(){
 
 
     fun selectCharacter(index: Int){
-        if(!charactersList.isEmpty()){
+        /*if(!charactersList.isEmpty()){
             _characterViewState.value = charactersList[index]
-        }
+            faction.value= charactersList[index].character_faction.toString()
+        }*/
     }
 
 
@@ -112,14 +130,28 @@ class ViewModel()  : ViewModel(){
                 charactersList.clear()
                 for (DataSnap in snapshot.children) {
                     val item = DataSnap.getValue(Character::class.java)
+                    Log.d(TAG, "onDataChange: item got? "+item)
 
                     if (item != null) {
                         charactersList.add(item)
+                        if (item.character_abilities_list != null){
+                            for (i in 0..item.character_abilities_list!!.size-1){
+                                ability.add(item.character_abilities_list[i])
+                                if (item.character_abilities_list[i].ability_effects != null){
+                                    for (j in 0 ..item.character_abilities_list[i].ability_effects!!.size-1){
+                                        ability_effects.add(item.character_abilities_list[i].ability_effects!![j])
+                                    }
+                                }
+
+                            }
+                        }
+
 
                         Log.d(TAG, "onDataChange: "+item)
                     }
                 }
                 Log.d(TAG, "getCharactersFromFirebase: "+charactersList.size)
+
 
             }
             override fun onCancelled(error: DatabaseError) {

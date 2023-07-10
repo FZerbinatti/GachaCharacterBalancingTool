@@ -35,12 +35,12 @@ fun CardCharacter(
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable {
-                viewModel.selectCharacter(index)
+                //viewModel.selectCharacter(index)
                 //viewModel.character = character
-                Log.d("Main Card", "CardCharacter: recieved char: "+character)
-                Log.d("Main Card", "CardCharacter: viewmodel char before: "+viewModel._characterViewState.value)
+                //Log.d("Main Card", "CardCharacter: recieved char: "+character)
+                //Log.d("Main Card", "CardCharacter: viewmodel char before: "+viewModel._characterViewState.value)
                 //viewModel._characterViewState.value = character
-                Log.d("Main Card", "CardCharacter: viewmodel char after: "+viewModel._characterViewState.value)
+                // Log.d("Main Card", "CardCharacter: viewmodel char after: "+viewModel._characterViewState.value)
 
 
                 //navController.navigate(Screen.ScreenNewCharacher.route)

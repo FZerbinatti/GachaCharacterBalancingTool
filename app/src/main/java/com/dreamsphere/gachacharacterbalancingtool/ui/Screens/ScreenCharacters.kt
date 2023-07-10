@@ -47,7 +47,7 @@ fun ScreenCharacters(navController: NavController, viewModel: ViewModel) {
                     backgroundColor = colorResource(id = R.color.white),
                     onClick = {
                         //vai alla pagina di creazione pg
-                        navController.navigate(Screen.ScreenNewCharacher.route)
+                        navController.navigate(Screen.ScreenNewCharacher.withArgs(-1))
 
                     }) {
                     Icon(Icons.Default.Add, contentDescription = null)

@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -53,12 +55,15 @@ import androidx.navigation.NavController
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
+import com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools.Screen
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogGenerals
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogNewAbility
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.WindowCenterOffsetPositionProvider
 import com.dreamsphere.gachacharacterbalancingtool.ui.theme.GachaCharacterBalancingToolTheme
 import com.dreamsphere.sharedshoplistk.repository.Firebase.Firebase
 import kotlinx.coroutines.launch
+
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnrememberedMutableState")
@@ -77,20 +82,22 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val abilityListState = viewModel.abilityListFlow.collectAsState()
+    var abilityListState = viewModel.abilityListFlow.collectAsState()
     val focusManager = LocalFocusManager.current
+
+    var index_ability =-1
 
     //firebase
     val FACTIONS = "factions"
     val CLASSES = "classes"
     val TIERS = "tiers"
 
+
+
     //var current_character = viewModel.characterViewState.value
 
     var character_name_string = mutableStateOf<String>("String")
     var character_name by remember { mutableStateOf(TextFieldValue(character_name_string.toString())) }
-
-    var character_faction_string = mutableStateOf<String>("")
 
     var character_description_string = mutableStateOf<String>("String")
     var character_description by remember { mutableStateOf(TextFieldValue(character_description_string.toString())) }
@@ -107,8 +114,23 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     var character_avatar_string = mutableStateOf<String>("String")
     var character_avatar by remember { mutableStateOf(TextFieldValue(character_avatar_string.toString())) }
 
+    var character_tier_string = mutableStateOf<String>("")
+    character_tier_string.value = viewModel.tier.value
+
+    var character_class_string = mutableStateOf<String>("")
+    character_class_string.value = viewModel.classs.value
+
+    var character_faction_string = mutableStateOf<String>("")
+    val factionState = viewModel.faction_state.collectAsState()
+    character_faction_string.value = factionState.value
+
     val characterListState = viewModel.charactersListFlow.collectAsState()
-    if (characterListState.value.size>0){
+
+    Log.d(TAG, "Main ScreenNewCharacher: list size?  "+characterListState.value.size)
+    Log.d(TAG, "Main ScreenNewCharacher: list index?  "+index)
+
+    if (characterListState.value.isNotEmpty() && !index!!.equals("-1")){
+
         val char = characterListState.value[index?.toInt()!!]
         character_name_string.value = char.character_name.toString()
         character_description_string.value = char.character_description.toString()
@@ -117,11 +139,11 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
         character_def_string.value = char.character_def.toString()
         character_avatar_string.value = char.character_avatar.toString()
         character_faction_string.value = char.character_faction.toString()
+        character_tier_string.value = char.character_tier.toString()
+        character_class_string.value = char.character_class.toString()
 
 
     }
-
-
 
     GachaCharacterBalancingToolTheme() {
         Scaffold(
@@ -174,7 +196,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                     scope.launch {
                                         lazyListState.scrollToItem(generalsListState.value.size)
                                     }
-                                }, viewModel, type)
+                                }, viewModel, type, index)
                             }
                         }
                         if (showDialogNewAbility.value) {
@@ -195,9 +217,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
 
                         // ------------------------------------- boxes --------------------------------------------------
                         OutlinedTextField(
-                            value = viewModel.character_name.value,
+                            value = character_name_string.value,
                             label = { Text(text = "character_name") },
-                            onValueChange = { viewModel.character_name.value =it },
+                            onValueChange = { character_name_string.value =it },
 
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -230,10 +252,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 .background(Color.White),
                         ) {
                             ClickableText(
-                                AnnotatedString(viewModel.faction.value),
+                                AnnotatedString(character_faction_string.value),
                                 onClick = {
                                     type = FACTIONS
-                                    Log.d("Main", "ScreenNewCharacher 1: " + type)
                                     viewModel.getHardCodedDataFromFirebase(type)
                                     showDialogGenerals.value = true
                                 },
@@ -270,7 +291,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 .background(Color.White),
                         ) {
                             ClickableText(
-                                AnnotatedString(viewModel.classs.value),
+                                AnnotatedString(character_class_string.value),
                                 onClick = {
                                     type = CLASSES
                                     viewModel.getHardCodedDataFromFirebase(type)
@@ -298,7 +319,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 .background(Color.White),
                         ) {
                             ClickableText(
-                                AnnotatedString(viewModel.tier.value),
+                                AnnotatedString(character_tier_string.value),
                                 onClick = {
                                     type = TIERS
                                     Log.d("Main", "ScreenNewCharacher 1: " + type)
@@ -345,13 +366,29 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                             onValueChange = { character_def_string.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
-                        OutlinedTextField(
-                            value = character_avatar_string.value,
-                            label = { Text(text = "character_avatar") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White),
-                            onValueChange = { character_avatar_string.value = it })
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            OutlinedTextField(
+                                value = character_avatar_string.value,
+                                label = { Text(text = "character_avatar") },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.White),
+                                onValueChange = { character_avatar_string.value = it })
+                            TextButton(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .width(50.dp),
+                                onClick = {
+                                    // alert dialog with list of database avatar images
+                                },
+                                border = BorderStroke(2.dp, Color.Gray),
+                                shape = RoundedCornerShape(15.dp)
+                            ) {
+                                Text(text = "+")
+                            }
+                        }
+
+
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         //listview con i nomi delle abilità
@@ -367,7 +404,12 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                         .height(50.dp)
                                         .fillMaxWidth(),
                                     onClick = {
-
+                                        // go to ability page and update viewmodel with differences
+                                        Log.d(TAG, "ScreenNewCharacher: modify ability: "+abilityListState.value[i].toString())
+                                        //navController.navigate(Screen.ScreenCharacterAbility.withArgs(abilityListState.value[i].toString()))
+                                        //remember locally what ability (index list you are modifying
+                                        //index_ability=i
+                                        //showDialogNewAbility.value = true
                                     },
                                     border = BorderStroke(2.dp, Color.Gray),
                                     shape = RoundedCornerShape(15.dp)
@@ -387,16 +429,16 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                             onClick = {
                                 //add firebase
                                 val character = Character(
-                                    character_name.text,
+                                    character_name_string.value,
                                     viewModel.ability,
-                                    viewModel.faction.value,
-                                    character_description.text,
-                                    viewModel.classs.value,
-                                    viewModel.tier.value,
-                                    character_atk.text,
-                                    character_def.text,
-                                    character_hp.text,
-                                    character_avatar.text
+                                    character_faction_string.value,
+                                    character_description_string.value,
+                                    character_class_string.value,
+                                    character_tier_string.value,
+                                    character_atk_string.value,
+                                    character_def_string.value,
+                                    character_hp_string.value,
+                                    character_avatar_string.value
                                 )
 
                                 Log.d(TAG, "Main ScreenNewCharacher: Added Character: " + character)

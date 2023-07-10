@@ -39,8 +39,6 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
 
     //val generalsListState = viewModel.generalListFlow.collectAsState()
 
-
-
     var ability_name by remember { mutableStateOf(TextFieldValue("")) }
     var ability_cooldown by remember { mutableStateOf(TextFieldValue("")) }
     var ability_cost by remember { mutableStateOf(TextFieldValue("")) }
@@ -48,10 +46,6 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
     var ability_change_aoe by remember { mutableStateOf(TextFieldValue("")) }
     var ability_effects by remember { mutableStateOf(TextFieldValue("")) }
     var ability_aoe by remember {mutableStateOf(false)}
-
-
-
-
 
     Surface(
         border = BorderStroke(1.dp, colorResource(id = R.color.black)),
@@ -100,8 +94,6 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                     onValueChange = { ability_name = it })
                 Spacer(modifier = Modifier.padding(10.dp))
 
-
-
                 OutlinedTextField(
                     value = ability_cooldown,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
@@ -146,7 +138,6 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                     onValueChange = { ability_change_aoe = it })
                 Spacer(modifier = Modifier.padding(10.dp))
 
-
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
 
                     Text(text = "Ability AOE")
@@ -176,16 +167,9 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                             Text(text = abilityEffectsListState.value.get(i).ability_effect_name.toString(), color = colorResource(id = R.color.black))
                         }
 
-
-
                         Spacer(modifier = Modifier.padding(10.dp))
                     }
                 }
-
-
-
-
-
 
                 // ------------------------------------ OK BUTTON ----------------------------------------
                 Row(modifier = Modifier.fillMaxWidth()) {

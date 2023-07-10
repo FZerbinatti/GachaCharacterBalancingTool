@@ -18,7 +18,7 @@ import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 
 @Composable
-fun PersonalizedAlertDialogGenerals(
+fun PersonalizedAlertDialogAvatars(
     closeRecord: () -> Unit,
     viewModel: ViewModel,
     type: String,
@@ -29,7 +29,6 @@ fun PersonalizedAlertDialogGenerals(
     val generalsListState = viewModel.generalListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-
     val FACTIONS = "factions"
     val CLASSES = "classes"
     val TIERS = "tiers"

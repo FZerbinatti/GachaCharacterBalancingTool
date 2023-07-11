@@ -69,7 +69,7 @@ fun PersonalizedAlertDialogGenerals(
                                 .fillMaxWidth(),
                             onClick = {
                                 if (type.equals(FACTIONS)){
-                                    viewModel.faction_flow.value= generalsListState.value.get(i)
+                                    viewModel.faction.value= generalsListState.value.get(i)
                                     viewModel.charactersListFlow.value[index!!.toInt()].character_faction=generalsListState.value.get(i)
                                 }else
                                 if (type.equals(CLASSES)){

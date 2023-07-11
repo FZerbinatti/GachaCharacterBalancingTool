@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Avatar
 import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 
@@ -26,7 +27,7 @@ fun PersonalizedAlertDialogAvatars(
 ) {
 
 
-    val generalsListState = viewModel.generalListFlow.collectAsState()
+    val avatarsListState = viewModel.avatarListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val FACTIONS = "factions"
@@ -54,32 +55,22 @@ fun PersonalizedAlertDialogAvatars(
                 modifier = Modifier.fillMaxWidth(),
 
             ) {
-                Log.d("Main Alert", "PersonalizedAlertDialog: "+generalsListState.value.size)
-                Log.d("Main Alert", "PersonalizedAlertDialog: "+generalsListState.value.toString())
-                if (generalsListState.value.size>0){
+                Log.d("Main Alert", "PersonalizedAlertDialog1: "+avatarsListState.value.size)
+                Log.d("Main Alert", "PersonalizedAlertDialog2: "+avatarsListState.value.toString())
+                if (avatarsListState.value.size>0){
 
 
-                    for (i in 0..generalsListState.value.size-1){
-                        Log.d("Main Alert", "PersonalizedAlertDialog: "+generalsListState.value.get(i).toString())
+                    for (i in 0..avatarsListState.value.size-1){
+                        Log.d("Main Alert", "PersonalizedAlertDialog3: "+avatarsListState.value.get(i).toString())
 
                         TextButton(
                             modifier = Modifier
                                 .height(50.dp)
                                 .fillMaxWidth(),
                             onClick = {
-                                if (type.equals(FACTIONS)){
-                                    viewModel.faction_flow.value= generalsListState.value.get(i)
-                                    viewModel.charactersListFlow.value[index!!.toInt()].character_faction=generalsListState.value.get(i)
-                                }else
-                                if (type.equals(CLASSES)){
-                                    viewModel.classs.value= generalsListState.value.get(i)
-                                    viewModel.charactersListFlow.value[index!!.toInt()].character_class=generalsListState.value.get(i)
-                                }else
-                                if (type.equals(TIERS)){
-                                    viewModel.tier.value= generalsListState.value.get(i)
-                                    viewModel.charactersListFlow.value[index!!.toInt()].character_tier=generalsListState.value.get(i)
-                                }
-
+                                viewModel.avatar.value= avatarsListState.value.get(i).avatar_name!!
+                                viewModel.charactersListFlow.value[index!!.toInt()].character_avatar=avatarsListState.value.get(i).avatar_name
+                                Log.d("TAG", "Main PersonalizedAlertDialogAvatars4: "+ viewModel.charactersListFlow.value[index!!.toInt()].character_avatar)
 
                                 closeRecord.invoke()
 
@@ -87,7 +78,7 @@ fun PersonalizedAlertDialogAvatars(
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)
                         ) {
-                            Text(text = generalsListState.value.get(i), color = colorResource(id = R.color.black))
+                            Text(text = avatarsListState.value.get(i).avatar_name.toString(), color = colorResource(id = R.color.black))
                         }
 
 

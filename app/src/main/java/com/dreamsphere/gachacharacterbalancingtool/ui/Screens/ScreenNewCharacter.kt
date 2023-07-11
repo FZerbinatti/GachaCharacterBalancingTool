@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,6 +57,7 @@ import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.dreamsphere.gachacharacterbalancingtool.R
 import com.dreamsphere.gachacharacterbalancingtool.ViewModels.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools.Screen
+import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogAvatars
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogGenerals
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.PersonalizedAlertDialogNewAbility
 import com.dreamsphere.gachacharacterbalancingtool.ui.Views.WindowCenterOffsetPositionProvider
@@ -75,6 +77,8 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     val scrollState = rememberScrollState()
     var showDialogGenerals = remember { mutableStateOf(false) }
     var showDialogNewAbility = remember { mutableStateOf(false) }
+    var showDialogAvatars = remember { mutableStateOf(false) }
+
     var type: String = ""
     var faction = remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -96,33 +100,32 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
 
     //var current_character = viewModel.characterViewState.value
 
-    var character_name_string = mutableStateOf<String>("String")
+    var character_name_string = mutableStateOf<String>("character_name")
     var character_name by remember { mutableStateOf(TextFieldValue(character_name_string.toString())) }
 
-    var character_description_string = mutableStateOf<String>("String")
+    var character_description_string = mutableStateOf<String>("character_description")
     var character_description by remember { mutableStateOf(TextFieldValue(character_description_string.toString())) }
 
-    var character_hp_string = mutableStateOf<String>("String")
+    var character_hp_string = mutableStateOf<String>("character_hp")
     var character_hp by remember { mutableStateOf(TextFieldValue(character_hp_string.toString())) }
 
-    var character_atk_string = mutableStateOf<String>("String")
+    var character_atk_string = mutableStateOf<String>("character_atk")
     var character_atk by remember { mutableStateOf(TextFieldValue(character_atk_string.toString())) }
 
-    var character_def_string = mutableStateOf<String>("String")
+    var character_def_string = mutableStateOf<String>("character_def")
     var character_def by remember { mutableStateOf(TextFieldValue(character_def_string.toString())) }
 
-    var character_avatar_string = mutableStateOf<String>("String")
-    var character_avatar by remember { mutableStateOf(TextFieldValue(character_avatar_string.toString())) }
+    var character_avatar_string = mutableStateOf<String>("character_avatar")
+    character_avatar_string.value = viewModel.avatar.value
 
-    var character_tier_string = mutableStateOf<String>("")
+    var character_tier_string = mutableStateOf<String>("character_tier_string")
     character_tier_string.value = viewModel.tier.value
 
-    var character_class_string = mutableStateOf<String>("")
+    var character_class_string = mutableStateOf<String>("character_class_string")
     character_class_string.value = viewModel.classs.value
 
-    var character_faction_string = mutableStateOf<String>("")
-    val factionState = viewModel.faction_state.collectAsState()
-    character_faction_string.value = factionState.value
+    var character_faction_string = mutableStateOf<String>("character_faction")
+    character_faction_string.value= viewModel.faction.value
 
     val characterListState = viewModel.charactersListFlow.collectAsState()
 
@@ -130,6 +133,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     Log.d(TAG, "Main ScreenNewCharacher: list index?  "+index)
 
     if (characterListState.value.isNotEmpty() && !index!!.equals("-1")){
+
+        Log.d(TAG, "Main ScreenNewCharacher: 5   "+characterListState.value.get(0).character_avatar)
+
 
         val char = characterListState.value[index?.toInt()!!]
         character_name_string.value = char.character_name.toString()
@@ -141,7 +147,6 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
         character_faction_string.value = char.character_faction.toString()
         character_tier_string.value = char.character_tier.toString()
         character_class_string.value = char.character_class.toString()
-
 
     }
 
@@ -199,6 +204,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 }, viewModel, type, index)
                             }
                         }
+
                         if (showDialogNewAbility.value) {
                             Popup(
                                 popupPositionProvider = WindowCenterOffsetPositionProvider(),
@@ -211,6 +217,22 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                         lazyListState.scrollToItem(generalsListState.value.size)
                                     }
                                 }, viewModel)
+                            }
+                        }
+
+                        if (showDialogAvatars.value) {
+
+                            Popup(
+                                popupPositionProvider = WindowCenterOffsetPositionProvider(),
+                                onDismissRequest = { showDialogAvatars.value = false },
+                                properties = PopupProperties(focusable = true)
+                            ) {
+                                PersonalizedAlertDialogAvatars({
+                                    showDialogAvatars.value = false
+                                    scope.launch {
+                                        lazyListState.scrollToItem(generalsListState.value.size)
+                                    }
+                                }, viewModel, type, index)
                             }
                         }
 
@@ -366,26 +388,31 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                             onValueChange = { character_def_string.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
-                        Row(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
                             OutlinedTextField(
                                 value = character_avatar_string.value,
                                 label = { Text(text = "character_avatar") },
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .background(Color.White),
                                 onValueChange = { character_avatar_string.value = it })
-                            TextButton(
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .width(50.dp),
-                                onClick = {
-                                    // alert dialog with list of database avatar images
-                                },
-                                border = BorderStroke(2.dp, Color.Gray),
-                                shape = RoundedCornerShape(15.dp)
-                            ) {
-                                Text(text = "+")
+
+                            Row(modifier = Modifier.fillMaxSize().padding(top = 10.dp, end = 10.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                                TextButton(
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .width(50.dp).fillMaxSize(),
+                                    onClick = {
+                                        // alert dialog with list of database avatar images
+                                        viewModel.getAvatarsFromFirebase()
+                                        showDialogAvatars.value = true
+                                    },
+                                    border = BorderStroke(2.dp, Color.Gray),
+                                    shape = RoundedCornerShape(15.dp)
+                                ) {
+                                    Text(text = "+")
+                                }
                             }
+
                         }
 
 
@@ -410,6 +437,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                         //remember locally what ability (index list you are modifying
                                         //index_ability=i
                                         //showDialogNewAbility.value = true
+
                                     },
                                     border = BorderStroke(2.dp, Color.Gray),
                                     shape = RoundedCornerShape(15.dp)

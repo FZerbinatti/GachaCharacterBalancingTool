@@ -1,22 +1,22 @@
 package com.dreamsphere.gachacharacterbalancingtool.ViewModels
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
+import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Avatar
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
 
 class ViewModel()  : ViewModel(){
     private val TAG = "Main ViewModel"
@@ -30,7 +30,10 @@ class ViewModel()  : ViewModel(){
     val _charactersListFlow = MutableStateFlow(charactersList)
     val charactersListFlow: StateFlow<List<Character>> get() = _charactersListFlow
 
-
+    // avatar selection
+    private var avatarList = mutableStateListOf<Avatar>()
+    private val _avatarListFlow = MutableStateFlow(avatarList)
+    val avatarListFlow: StateFlow<List<Avatar>> get() = _avatarListFlow
 
     //index to point list
     var index = -1
@@ -49,21 +52,18 @@ class ViewModel()  : ViewModel(){
     val faction_string = "select faction"
     val classs_string = "select class"
     val tier_string = "select tier"
+    var avatar_string = "avatar_name"
 
     val faction = mutableStateOf(faction_string)
     val classs = mutableStateOf(classs_string)
     val tier = mutableStateOf(tier_string)
-
-    var faction_flow = MutableStateFlow<String>(faction_string)
-    var classs_flow = MutableStateFlow(classs_string)
-    var tier_flow = MutableStateFlow(tier_string)
-
-    var faction_state: StateFlow<String> = faction_flow
-    var classs_state: StateFlow<String> = classs_flow
-    var tier_state: StateFlow<String> = tier_flow
+    val avatar = mutableStateOf(avatar_string)
 
 
-    var character_name = mutableStateOf<String>("Character Name")
+
+
+
+
 
     //abilitiers specs
     val ability_effects = mutableStateListOf<AbilityEffect>()
@@ -74,6 +74,12 @@ class ViewModel()  : ViewModel(){
 
     val abilityEffectsListFlow: StateFlow<List<AbilityEffect>> get() = _abilityEffectsListFlow
     val abilityListFlow: StateFlow<List<Ability>> get() = _abilityListFlow
+
+
+
+
+
+
 
 
 
@@ -158,6 +164,31 @@ class ViewModel()  : ViewModel(){
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    fun getAvatarsFromFirebase() {
+        Log.d(TAG, "getAvatarsFromFirebase: ")
+        //var storageRef = storage.reference
+        //val storage = FirebaseStorage.getInstance("gs://gachacharacterbalancingtool.appspot.com")
+        val storage = FirebaseStorage.getInstance()
+       // val storage_reference = storage.reference.child("avatars/")
+        var storageRef = storage.reference
+
+        val gsReference = storage.getReferenceFromUrl("gs://gachacharacterbalancingtool.appspot.com/avatars")
+        Log.d(TAG, "getAvatarsFromFirebase: "+gsReference)
+        avatarList.clear()
+        gsReference.listAll()
+            .addOnSuccessListener { listResult ->
+                for (item in listResult.items) {
+                    avatarList.add(Avatar( item.name, gsReference.toString()+"/"+item.name))
+                    Log.d(TAG, "getAvatarsFromFirebase: "+  item.name + " path: "+gsReference.toString()+"/"+item.name)
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors
+                Log.d(TAG, "getAvatarsFromFirebase Error: "+exception)
+            }
     }
 
 /*    fun getCharecterData(characterName: String) {

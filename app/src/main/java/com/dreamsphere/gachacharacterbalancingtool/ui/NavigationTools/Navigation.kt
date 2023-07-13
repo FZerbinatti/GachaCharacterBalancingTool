@@ -14,6 +14,7 @@ import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenCharacters
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenLogin
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenMainMenu
 import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenNewCharacher
+import com.dreamsphere.gachacharacterbalancingtool.ui.Screens.ScreenNewClass
 
 @Composable
 fun Navigation() {
@@ -30,6 +31,10 @@ fun Navigation() {
 
         composable(route = Screen.ScreenCharacters.route) {
             ScreenCharacters(navController = navController,viewModel = ViewModel())
+        }
+
+        composable(route = Screen.ScreenNewClasss.route) {
+            ScreenNewClass(navController = navController)
         }
 
         /*composable(route = Screen.ScreenNewCharacher.route) {

@@ -40,5 +40,13 @@ fun ScreenMainMenu(navController: NavController) {
             modifier = Modifier.align(CenterHorizontally)) {
             Text(text = "Characters")
         }
+
+        Button(onClick = {
+            navController.navigate(Screen.ScreenNewClasss.route)
+
+        },
+            modifier = Modifier.align(CenterHorizontally)) {
+            Text(text = "New Class")
+        }
     }
 }

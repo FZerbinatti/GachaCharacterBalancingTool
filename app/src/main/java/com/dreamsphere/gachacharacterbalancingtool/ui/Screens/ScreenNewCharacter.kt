@@ -3,6 +3,7 @@ package com.dreamsphere.gachacharacterbalancingtool.ui.Screens
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -115,6 +116,12 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     var character_def_string = mutableStateOf<String>("")
     var character_def by remember { mutableStateOf(character_def_string) }
 
+    var character_energy_string = mutableStateOf<String>("")
+    var character_energy by remember { mutableStateOf(character_energy_string) }
+
+    var character_energy_regen_string = mutableStateOf<String>("")
+    var character_energy_regen by remember { mutableStateOf(character_energy_regen_string) }
+
     var character_avatar_string = mutableStateOf<String>("")
     character_avatar_string.value = viewModel.avatar.value
 
@@ -143,6 +150,8 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
         character_hp_string.value = char.character_hp.toString()
         character_atk_string.value = char.character_atk.toString()
         character_def_string.value = char.character_def.toString()
+        character_energy_string.value = char.character_energy.toString()
+        character_energy_string.value = char.character_energy_regen.toString()
         character_avatar_string.value = char.character_avatar.toString()
         character_faction_string.value = char.character_faction.toString()
         character_tier_string.value = char.character_tier.toString()
@@ -388,6 +397,26 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                             onValueChange = { character_def.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
+                        OutlinedTextField(
+                            value = character_energy.value,
+                            label = { Text(text = "character_energy") },
+                            keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White),
+                            onValueChange = { character_energy.value = it })
+                        Spacer(modifier = Modifier.padding(int_spacer))
+
+                        OutlinedTextField(
+                            value = character_energy_regen.value,
+                            label = { Text(text = "character_energy_regen / sec") },
+                            keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White),
+                            onValueChange = { character_energy_regen.value = it })
+                        Spacer(modifier = Modifier.padding(int_spacer))
+
                         Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
                             OutlinedTextField(
                                 value = character_avatar_string.value,
@@ -396,11 +425,14 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                     .background(Color.White),
                                 onValueChange = { character_avatar_string.value = it })
 
-                            Row(modifier = Modifier.fillMaxSize().padding(top = 10.dp, end = 10.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                            Row(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 10.dp, end = 10.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                                 TextButton(
                                     modifier = Modifier
                                         .height(50.dp)
-                                        .width(50.dp).fillMaxSize(),
+                                        .width(50.dp)
+                                        .fillMaxSize(),
                                     onClick = {
                                         // alert dialog with list of database avatar images
                                         viewModel.getAvatarsFromFirebase()
@@ -466,12 +498,34 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                     character_atk.value,
                                     character_def.value,
                                     character_hp.value,
+                                    character_energy.value,
+                                    character_energy_regen.value,
                                     character_avatar_string.value
                                 )
-
                                 Log.d(TAG, "Main ScreenNewCharacher: Added Character: " + character)
-                                val firebase= Firebase()
-                                firebase.addCharacterFirebase(character)
+                                if(
+                                    character_name.value.isEmpty()||
+                                    character_faction_string.value.isEmpty()||
+                                    character_description.value.isEmpty()||
+                                    character_class_string.value.isEmpty()||
+                                    character_tier_string.value.isEmpty()||
+                                    character_atk.value.isEmpty()||
+                                    character_def.value.isEmpty()||
+                                    character_hp.value.isEmpty()||
+                                    character_energy.value.isEmpty()||
+                                    character_energy_regen.value.isEmpty()||
+                                    character_avatar_string.value.equals("avatar_name")
+                                ){
+                                    Log.d(TAG, "ScreenNewCharacher: Error")
+                                    Toast.makeText(context, "J hai dimenticato di fillare un campo", Toast.LENGTH_LONG).show()
+                                }else{
+                                    
+                                    val firebase= Firebase()
+                                    firebase.addCharacterFirebase(character)
+                                    navController.navigate(Screen.ScreenMainMenu.route)
+                                }
+
+                                
                             },
                             border = BorderStroke(2.dp, Color.Gray),
                             shape = RoundedCornerShape(15.dp)

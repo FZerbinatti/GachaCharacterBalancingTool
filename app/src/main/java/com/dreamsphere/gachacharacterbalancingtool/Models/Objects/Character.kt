@@ -11,6 +11,8 @@ data class Character(
     val character_atk:String?="",
     val character_def:String?="",
     val character_hp:String?="",
+    val character_energy:String?="",
+    val character_energy_regen:String?="",
     var character_avatar:String?="",
 
     )

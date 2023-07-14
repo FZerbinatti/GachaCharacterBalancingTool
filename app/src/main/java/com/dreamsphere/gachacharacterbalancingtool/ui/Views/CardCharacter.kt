@@ -44,7 +44,7 @@ fun CardCharacter(
 
 
                 //navController.navigate(Screen.ScreenNewCharacher.route)
-                navController.navigate(Screen.ScreenNewCharacher.withArgs(index.toString()))
+                //navController.navigate(Screen.ScreenNewCharacher.withArgs(index.toString()))
             },
 
         shape = MaterialTheme.shapes.medium,

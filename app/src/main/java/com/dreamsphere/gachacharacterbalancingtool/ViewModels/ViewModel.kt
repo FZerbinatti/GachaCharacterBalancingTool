@@ -59,12 +59,6 @@ class ViewModel()  : ViewModel(){
     val tier = mutableStateOf(tier_string)
     val avatar = mutableStateOf(avatar_string)
 
-
-
-
-
-
-
     //abilitiers specs
     val ability_effects = mutableStateListOf<AbilityEffect>()
     val ability= mutableStateListOf<Ability>()
@@ -75,16 +69,6 @@ class ViewModel()  : ViewModel(){
     val abilityEffectsListFlow: StateFlow<List<AbilityEffect>> get() = _abilityEffectsListFlow
     val abilityListFlow: StateFlow<List<Ability>> get() = _abilityListFlow
 
-
-
-
-
-
-
-
-
-
-
     fun selectCharacter(index: Int){
         /*if(!charactersList.isEmpty()){
             _characterViewState.value = charactersList[index]
@@ -92,12 +76,10 @@ class ViewModel()  : ViewModel(){
         }*/
     }
 
-
     init {
         //getHardCodedDataFromFirebase(type)
         getCharactersFromFirebase()
         Log.d(TAG, "char? : "+characterViewState.value)
-
     }
 
     fun getHardCodedDataFromFirebase(type: String) {
@@ -134,10 +116,11 @@ class ViewModel()  : ViewModel(){
         firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 charactersList.clear()
+
+
                 for (DataSnap in snapshot.children) {
                     val item = DataSnap.getValue(Character::class.java)
                     Log.d(TAG, "onDataChange: item got? "+item)
-
                     if (item != null) {
                         charactersList.add(item)
                         if (item.character_abilities_list != null){
@@ -155,6 +138,9 @@ class ViewModel()  : ViewModel(){
 
                         Log.d(TAG, "onDataChange: "+item)
                     }
+                    ability.clear()
+                    ability_effects.clear()
+
                 }
                 Log.d(TAG, "getCharactersFromFirebase: "+charactersList.size)
 
@@ -163,6 +149,7 @@ class ViewModel()  : ViewModel(){
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
+
         })
     }
 

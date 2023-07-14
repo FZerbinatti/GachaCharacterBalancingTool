@@ -88,6 +88,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     val scope = rememberCoroutineScope()
 
     var abilityListState = viewModel.abilityListFlow.collectAsState()
+
     val focusManager = LocalFocusManager.current
 
     var index_ability =-1

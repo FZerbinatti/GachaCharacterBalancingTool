@@ -100,31 +100,31 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
 
     //var current_character = viewModel.characterViewState.value
 
-    var character_name_string = mutableStateOf<String>("character_name")
-    var character_name by remember { mutableStateOf(TextFieldValue(character_name_string.toString())) }
+    var character_name_string = mutableStateOf<String>("")
+    var character_name by remember { mutableStateOf(character_name_string) }
 
-    var character_description_string = mutableStateOf<String>("character_description")
-    var character_description by remember { mutableStateOf(TextFieldValue(character_description_string.toString())) }
+    var character_description_string = mutableStateOf<String>("")
+    var character_description by remember { mutableStateOf(character_description_string) }
 
-    var character_hp_string = mutableStateOf<String>("character_hp")
-    var character_hp by remember { mutableStateOf(TextFieldValue(character_hp_string.toString())) }
+    var character_hp_string = mutableStateOf<String>("")
+    var character_hp by remember { mutableStateOf(character_hp_string) }
 
-    var character_atk_string = mutableStateOf<String>("character_atk")
-    var character_atk by remember { mutableStateOf(TextFieldValue(character_atk_string.toString())) }
+    var character_atk_string = mutableStateOf<String>("")
+    var character_atk by remember { mutableStateOf(character_atk_string) }
 
-    var character_def_string = mutableStateOf<String>("character_def")
-    var character_def by remember { mutableStateOf(TextFieldValue(character_def_string.toString())) }
+    var character_def_string = mutableStateOf<String>("")
+    var character_def by remember { mutableStateOf(character_def_string) }
 
-    var character_avatar_string = mutableStateOf<String>("character_avatar")
+    var character_avatar_string = mutableStateOf<String>("")
     character_avatar_string.value = viewModel.avatar.value
 
-    var character_tier_string = mutableStateOf<String>("character_tier_string")
+    var character_tier_string = mutableStateOf<String>("")
     character_tier_string.value = viewModel.tier.value
 
-    var character_class_string = mutableStateOf<String>("character_class_string")
+    var character_class_string = mutableStateOf<String>("")
     character_class_string.value = viewModel.classs.value
 
-    var character_faction_string = mutableStateOf<String>("character_faction")
+    var character_faction_string = mutableStateOf<String>("")
     character_faction_string.value= viewModel.faction.value
 
     val characterListState = viewModel.charactersListFlow.collectAsState()
@@ -239,9 +239,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
 
                         // ------------------------------------- boxes --------------------------------------------------
                         OutlinedTextField(
-                            value = character_name_string.value,
+                            value = character_name.value,
                             label = { Text(text = "character_name") },
-                            onValueChange = { character_name_string.value =it },
+                            onValueChange = { character_name.value =it },
 
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -288,14 +288,14 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_description_string.value,
+                            value = character_description.value,
                             label = { Text(text = "character_description") },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
 
-                            onValueChange = { character_description_string.value = it })
+                            onValueChange = { character_description.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         Row(
@@ -356,36 +356,36 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_hp_string.value,
+                            value = character_hp.value,
                             label = { Text(text = "character_hp") },
                             keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_hp_string.value = it })
+                            onValueChange = { character_hp.value = it })
 
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_atk_string.value,
+                            value = character_atk.value,
                             label = { Text(text = "character_atk") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
 
-                            onValueChange = { character_atk_string.value = it })
+                            onValueChange = { character_atk.value = it })
 
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         OutlinedTextField(
-                            value = character_def_string.value,
+                            value = character_def.value,
                             label = { Text(text = "character_def") },
                             keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White),
-                            onValueChange = { character_def_string.value = it })
+                            onValueChange = { character_def.value = it })
                         Spacer(modifier = Modifier.padding(int_spacer))
 
                         Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
@@ -457,15 +457,15 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                             onClick = {
                                 //add firebase
                                 val character = Character(
-                                    character_name_string.value,
+                                    character_name.value,
                                     viewModel.ability,
                                     character_faction_string.value,
-                                    character_description_string.value,
+                                    character_description.value,
                                     character_class_string.value,
                                     character_tier_string.value,
-                                    character_atk_string.value,
-                                    character_def_string.value,
-                                    character_hp_string.value,
+                                    character_atk.value,
+                                    character_def.value,
+                                    character_hp.value,
                                     character_avatar_string.value
                                 )
 

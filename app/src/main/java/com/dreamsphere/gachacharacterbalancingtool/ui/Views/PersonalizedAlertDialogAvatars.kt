@@ -69,8 +69,11 @@ fun PersonalizedAlertDialogAvatars(
                                 .fillMaxWidth(),
                             onClick = {
                                 viewModel.avatar.value= avatarsListState.value.get(i).avatar_name!!
-                                viewModel.charactersListFlow.value[index!!.toInt()].character_avatar=avatarsListState.value.get(i).avatar_name
-                                Log.d("TAG", "Main PersonalizedAlertDialogAvatars4: "+ viewModel.charactersListFlow.value[index!!.toInt()].character_avatar)
+                                if (viewModel.charactersListFlow.value.size>0){
+                                    viewModel.charactersListFlow.value[index!!.toInt()].character_avatar=avatarsListState.value.get(i).avatar_name
+                                    Log.d("TAG", "Main PersonalizedAlertDialogAvatars4: "+ viewModel.charactersListFlow.value[index!!.toInt()].character_avatar)
+
+                                }
 
                                 closeRecord.invoke()
 

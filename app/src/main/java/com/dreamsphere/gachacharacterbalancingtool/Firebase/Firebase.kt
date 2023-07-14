@@ -29,6 +29,7 @@ class Firebase() {
 
 
     fun addCharacterFirebase(character: Character) {
+        Log.d(TAG, "addCharacterFirebase: "+character)
         firebase_shoplists_ids.child(character.character_name.toString()).setValue(character)
     }
 

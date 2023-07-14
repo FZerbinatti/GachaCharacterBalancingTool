@@ -70,19 +70,19 @@ fun PersonalizedAlertDialogGenerals(
                             onClick = {
                                 if (type.equals(FACTIONS)){
                                     viewModel.faction.value= generalsListState.value.get(i)
-                                    if (viewModel.charactersListFlow.value.size>0){
+                                    if (viewModel.charactersListFlow.value.size>0&& index!!.toInt()>-1){
                                         viewModel.charactersListFlow.value[index!!.toInt()].character_faction=generalsListState.value.get(i)
                                     }
                                 }else
                                 if (type.equals(CLASSES)){
                                     viewModel.classs.value= generalsListState.value.get(i)
-                                    if (viewModel.charactersListFlow.value.size>0){
+                                    if (viewModel.charactersListFlow.value.size>0&& index!!.toInt()>-1){
                                         viewModel.charactersListFlow.value[index!!.toInt()].character_class=generalsListState.value.get(i)
                                     }
                                 }else
                                 if (type.equals(TIERS)){
                                     viewModel.tier.value= generalsListState.value.get(i)
-                                    if (viewModel.charactersListFlow.value.size>0){
+                                    if (viewModel.charactersListFlow.value.size>0&& index!!.toInt()>-1){
                                         viewModel.charactersListFlow.value[index!!.toInt()].character_tier=generalsListState.value.get(i)
                                     }
                                 }

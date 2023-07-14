@@ -504,17 +504,19 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 )
                                 Log.d(TAG, "Main ScreenNewCharacher: Added Character: " + character)
                                 if(
-                                    character_name.value.isEmpty()||
-                                    character_faction_string.value.isEmpty()||
-                                    character_description.value.isEmpty()||
-                                    character_class_string.value.isEmpty()||
-                                    character_tier_string.value.isEmpty()||
-                                    character_atk.value.isEmpty()||
-                                    character_def.value.isEmpty()||
-                                    character_hp.value.isEmpty()||
-                                    character_energy.value.isEmpty()||
-                                    character_energy_regen.value.isEmpty()||
-                                    character_avatar_string.value.equals("avatar_name")
+                                    character.character_name!!.isEmpty()||
+                                    character.character_faction!!.isEmpty()||
+                                    character.character_description!!.isEmpty()||
+                                    character.character_class!!.isEmpty()||
+                                    character.character_tier!!.isEmpty()||
+                                    character.character_atk!!.isEmpty()||
+                                    character.character_def!!.isEmpty()||
+                                    character.character_hp!!.isEmpty()||
+                                    character.character_energy!!.isEmpty()||
+                                    character.character_energy_regen!!.isEmpty()||
+                                    character.character_avatar!!.equals("avatar_name")||
+                                    character.character_abilities_list!!.size==0
+
                                 ){
                                     Log.d(TAG, "ScreenNewCharacher: Error")
                                     Toast.makeText(context, "J hai dimenticato di fillare un campo", Toast.LENGTH_LONG).show()

@@ -75,7 +75,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScreenNewClass(navController: NavController) {
 
-
+    val context = LocalContext.current
     val int_spacer = 10.dp
     val scrollState = rememberScrollState()
 
@@ -167,7 +167,7 @@ fun ScreenNewClass(navController: NavController) {
 
 
                                 }else{
-                                    val firebase= Firebase()
+                                    val firebase= Firebase(context)
                                     firebase.addClasssFirebase(classs)
                                     navController.navigate(Screen.ScreenMainMenu.route)
                                 }

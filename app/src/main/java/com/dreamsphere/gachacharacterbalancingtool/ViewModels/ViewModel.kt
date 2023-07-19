@@ -1,5 +1,6 @@
 package com.dreamsphere.gachacharacterbalancingtool.ViewModels
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -8,18 +9,23 @@ import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Ability
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.AbilityEffect
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Avatar
 import com.dreamsphere.gachacharacterbalancingtool.Models.Objects.Character
+import com.dreamsphere.gachacharacterbalancingtool.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-
-class ViewModel()  : ViewModel(){
+class ViewModel(context: Context)  : ViewModel(){
     private val TAG = "Main ViewModel"
+
+    //FIREBASE
+    val database = Firebase.database(context.getString(R.string.DATABASE))
+    val database_characters = database.getReference((context.getString(R.string.CHARACTERS)))
+    val database_attributes = database.getReference((context.getString(R.string.ATTRIBUTES)))
 
     //Generals
     private var generalList = mutableStateListOf<String>()
@@ -82,12 +88,11 @@ class ViewModel()  : ViewModel(){
         Log.d(TAG, "char? : "+characterViewState.value)
     }
 
-    fun getHardCodedDataFromFirebase(type: String) {
+    fun getHardCodedDataFromFirebase(type: String, context: Context) {
         Log.d(TAG, "getHardCodedDataFromFirebase: "+type)
 
-        val database = com.google.firebase.ktx.Firebase.database("https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/")
         //var index=0
-        val firebase_shoplists_ids = database.getReference("hardcoded_data").child("characters_general").child(type)
+        val firebase_shoplists_ids = database_attributes.child((context.getString(R.string.CHARACTERS_ATTRIBUTES))).child(type)
 
         firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -109,14 +114,9 @@ class ViewModel()  : ViewModel(){
 
     fun getCharactersFromFirebase() {
 
-        val database = com.google.firebase.ktx.Firebase.database("https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/")
-        //var index=0
-        val firebase_shoplists_ids = database.getReference("characters")
-
-        firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
+        database_characters.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 charactersList.clear()
-
 
                 for (DataSnap in snapshot.children) {
                     val item = DataSnap.getValue(Character::class.java)
@@ -126,7 +126,11 @@ class ViewModel()  : ViewModel(){
                         if (item.character_abilities_list != null){
                             for (i in 0..item.character_abilities_list!!.size-1){
                                 ability.add(item.character_abilities_list[i])
+                                Log.d(TAG, "Main onDataChange: "+item.character_abilities_list[i])
                                 if (item.character_abilities_list[i].ability_effects != null){
+                                    Log.d(TAG, "Main onDataChange: "+item.character_abilities_list[i].ability_effects!!.size)
+                                    Log.d(TAG, "Main onDataChange: "+item.character_abilities_list[i].ability_effects!!)
+
                                     for (j in 0 ..item.character_abilities_list[i].ability_effects!!.size-1){
                                         ability_effects.add(item.character_abilities_list[i].ability_effects!![j])
                                     }

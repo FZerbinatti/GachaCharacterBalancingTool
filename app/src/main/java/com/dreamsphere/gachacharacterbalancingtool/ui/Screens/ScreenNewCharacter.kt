@@ -74,6 +74,7 @@ import kotlinx.coroutines.launch
 fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index: String?) {
 
 
+
     val int_spacer = 10.dp
     val scrollState = rememberScrollState()
     var showDialogGenerals = remember { mutableStateOf(false) }
@@ -287,7 +288,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 AnnotatedString(character_faction_string.value),
                                 onClick = {
                                     type = FACTIONS
-                                    viewModel.getHardCodedDataFromFirebase(type)
+                                    viewModel.getHardCodedDataFromFirebase(type, context)
                                     showDialogGenerals.value = true
                                 },
                                 modifier = Modifier
@@ -326,7 +327,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 AnnotatedString(character_class_string.value),
                                 onClick = {
                                     type = CLASSES
-                                    viewModel.getHardCodedDataFromFirebase(type)
+                                    viewModel.getHardCodedDataFromFirebase(type, context)
                                     showDialogGenerals.value = true
                                 },
                                 modifier = Modifier
@@ -355,7 +356,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                 onClick = {
                                     type = TIERS
                                     Log.d("Main", "ScreenNewCharacher 1: " + type)
-                                    viewModel.getHardCodedDataFromFirebase(type)
+                                    viewModel.getHardCodedDataFromFirebase(type, context)
                                     showDialogGenerals.value = true
                                 },
                                 modifier = Modifier
@@ -523,7 +524,7 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
                                     Toast.makeText(context, "J hai dimenticato di fillare un campo", Toast.LENGTH_LONG).show()
                                 }else{
                                     
-                                    val firebase= Firebase()
+                                    val firebase= Firebase(context)
                                     firebase.addCharacterFirebase(character)
                                     navController.navigate(Screen.ScreenMainMenu.route)
                                 }

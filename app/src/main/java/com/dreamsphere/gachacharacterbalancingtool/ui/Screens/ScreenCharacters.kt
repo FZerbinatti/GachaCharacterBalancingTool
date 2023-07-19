@@ -34,9 +34,7 @@ import com.dreamsphere.gachacharacterbalancingtool.ui.theme.GachaCharacterBalanc
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ScreenCharacters(navController: NavController, viewModel: ViewModel) {
-    //lista di tutti i characters
-    /*var characther_name by remember { mutableStateOf("characther_name") }
-    characther_name = "characther_name"*/
+
     val characterListState = viewModel.charactersListFlow.collectAsState()
 
     GachaCharacterBalancingToolTheme() {
@@ -69,10 +67,6 @@ fun ScreenCharacters(navController: NavController, viewModel: ViewModel) {
                         ) {
 
                             itemsIndexed(viewModel.charactersList) { index, character ->
-                                /*val moshi = Moshi.Builder().build()
-                                val jsonAdapter = moshi.adapter(Character::class.java).lenient()
-                                val charJson = jsonAdapter.toJson(character)*/
-
                                 CardCharacter(navController, viewModel, character, index)
                             }
 

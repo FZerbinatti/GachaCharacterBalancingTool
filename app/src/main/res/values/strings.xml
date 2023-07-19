@@ -3,4 +3,24 @@
     <string name="ALERT_FACTION">Select Faction</string>
     <string name="CONFIRM">ok</string>
     <string name="CANCEL">cancel</string>
+
+
+
+    // TEST DATABASE
+    <string name="DATABASE">https://gachacharacterbalancingtool-default-rtdb.europe-west1.firebasedatabase.app/</string>
+
+
+    <!--
+        // PRODUCTION DATABASE
+        <string name="DATABASE">https://summonersquest-98b4a-default-rtdb.europe-west1.firebasedatabase.app/</string>
+    -->
+
+    <string name="CHARACTERS">CHARACTERS</string>
+    <string name="ATTRIBUTES">ATTRIBUTES</string>
+    <string name="CHARACTERS_ATTRIBUTES">CHARACTERS_ATTRIBUTES</string>
+    <string name="ABILITIES">ABILITIES</string>
+    <string name="CLASSES">CLASSES</string>
+    <string name="FACTIONS">FACTIONS</string>
+    <string name="TIERS">TIERS</string>
+
 </resources>

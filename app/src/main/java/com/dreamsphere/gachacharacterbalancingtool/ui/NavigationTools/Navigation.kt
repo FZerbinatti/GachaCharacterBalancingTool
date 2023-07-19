@@ -3,6 +3,7 @@ package com.dreamsphere.gachacharacterbalancingtool.ui.NavigationTools
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,7 +31,7 @@ fun Navigation() {
         }
 
         composable(route = Screen.ScreenCharacters.route) {
-            ScreenCharacters(navController = navController,viewModel = ViewModel())
+            ScreenCharacters(navController = navController,viewModel = ViewModel(LocalContext.current))
         }
 
         composable(route = Screen.ScreenNewClasss.route) {
@@ -52,7 +53,7 @@ fun Navigation() {
             )
         ){entry->
             Log.d(TAG, "Navigation: "+entry)
-            ScreenNewCharacher(navController, viewModel = ViewModel(), index = entry.arguments?.getString("index"))
+            ScreenNewCharacher(navController, viewModel = ViewModel(LocalContext.current), index = entry.arguments?.getString("index"))
         }
 
 

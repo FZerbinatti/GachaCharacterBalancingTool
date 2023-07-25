@@ -15,6 +15,9 @@
         <string name="DATABASE">https://summonersquest-98b4a-default-rtdb.europe-west1.firebasedatabase.app/</string>
     -->
 
+    // REGISTRATION GO ON PRODUCTION DATABASE
+    <string name="PRODUCTION_DATABASE">https://summonersquest-98b4a-default-rtdb.europe-west1.firebasedatabase.app/</string>
+
     <string name="CHARACTERS">CHARACTERS</string>
     <string name="ATTRIBUTES">ATTRIBUTES</string>
     <string name="CHARACTERS_ATTRIBUTES">CHARACTERS_ATTRIBUTES</string>

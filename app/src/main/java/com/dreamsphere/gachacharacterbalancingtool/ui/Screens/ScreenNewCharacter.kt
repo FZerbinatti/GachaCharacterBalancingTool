@@ -95,9 +95,9 @@ fun ScreenNewCharacher(navController: NavController, viewModel: ViewModel, index
     var index_ability =-1
 
     //firebase
-    val FACTIONS = "factions"
-    val CLASSES = "classes"
-    val TIERS = "tiers"
+    val FACTIONS = "FACTIONS"
+    val CLASSES = "CLASSES"
+    val TIERS = "TIERS"
 
 
 

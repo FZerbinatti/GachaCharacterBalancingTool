@@ -195,11 +195,11 @@ fun PersonalizedAlertDialogNewAbility(closeRecord: () -> Unit, viewModel: ViewMo
                                 viewModel.ability.add(Ability(
                                     ability_name.text,
                                     viewModel.abilityEffectsListFlow.value,
-                                    ability_cooldown.text.toInt(),
-                                    ability_cost.text.toInt(),
-                                    ability_unlock.text.toInt(),
+                                    ability_cooldown.text.trim().toInt(),
+                                    ability_cost.text.trim().toInt(),
+                                    ability_unlock.text.trim().toInt(),
                                     ability_aoe,
-                                    ability_change_aoe.text.toInt(),
+                                    ability_change_aoe.text.trim().toInt(),
 
 
 

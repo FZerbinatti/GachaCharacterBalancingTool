@@ -125,9 +125,9 @@ fun PersonalizedAlertDialogNewAbilityEffect(closeRecord: () -> Unit, viewModel: 
                         viewModel.ability_effects.add(AbilityEffect(
                             ability_effect_name.text,
                             ability_effect_type.text,
-                            ability_effect_value.text.toInt(),
+                            ability_effect_value.text.trim().toInt(),
                             ability_effect_description.text,
-                            ability_effect_unolock.text.toInt()  ))
+                            ability_effect_unolock.text.trim().toInt()  ))
                         closeRecord.invoke()
                         //add to list
                     },

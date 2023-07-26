@@ -30,9 +30,9 @@ fun PersonalizedAlertDialogGenerals(
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val FACTIONS = "factions"
-    val CLASSES = "classes"
-    val TIERS = "tiers"
+    val FACTIONS = "FACTIONS"
+    val CLASSES = "CLASSES"
+    val TIERS = "TIERS"
     /*val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(focusRequester) {

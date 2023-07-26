@@ -58,7 +58,7 @@ class ViewModel(context: Context)  : ViewModel(){
     val faction_string = "select faction"
     val classs_string = "select class"
     val tier_string = "select tier"
-    var avatar_string = "avatar_name"
+    var avatar_string = "avatar name"
 
     val faction = mutableStateOf(faction_string)
     val classs = mutableStateOf(classs_string)
